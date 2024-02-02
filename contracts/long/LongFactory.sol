@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.6.12;
 
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
@@ -47,12 +46,12 @@ contract LongFactory is OwnableUpgradeable {
         mintPrice = _mintPrice;
     }
 
-    function setStartEnd(uint256 _startAt, uint256 _endAt) external {
+    function setStartEnd(uint256 _startAt, uint256 _endAt) external onlyOwner {
         startAt = _startAt;
         endAt   = _endAt;
     }
 
-    function setMintPrice(uint256 _mintPrice) external {
+    function setMintPrice(uint256 _mintPrice) external onlyOwner {
         mintPrice = _mintPrice;
     }
 
@@ -82,7 +81,7 @@ contract LongFactory is OwnableUpgradeable {
         userDeposit[msg.sender] +=  mintFee;
 
         totalMint += mintable;
-        IMintInList(longNFT).mintInList(msg.sender, amount);
+        IMintInList(longNFT).mintInList(msg.sender, mintable);
 
         if(msg.value > mintFee) {
             payable(msg.sender).transfer(msg.value - mintFee);
